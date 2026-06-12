@@ -7,40 +7,22 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
   :root {
-    --bg: #ffffff;
-    --bg2: #f5f5f3;
-    --bg3: #eeecea;
-    --text: #1a1a18;
-    --text2: #6b6b67;
-    --border: rgba(0,0,0,0.12);
-    --border2: rgba(0,0,0,0.22);
-    --blue: #185FA5;
-    --blue-bg: #E6F1FB;
-    --blue-text: #0C447C;
-    --green: #3B6D11;
-    --green-bg: #EAF3DE;
-    --green-text: #27500A;
-    --red: #A32D2D;
-    --red-bg: #FCEBEB;
-    --red-text: #791F1F;
-    --radius: 8px;
-    --radius-lg: 12px;
+    --bg: #ffffff; --bg2: #f5f5f3; --bg3: #eeecea;
+    --text: #1a1a18; --text2: #6b6b67;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --blue: #185FA5; --blue-bg: #E6F1FB; --blue-text: #0C447C;
+    --green: #3B6D11; --green-bg: #EAF3DE; --green-text: #27500A;
+    --red: #A32D2D; --red-bg: #FCEBEB; --red-text: #791F1F;
+    --radius: 8px; --radius-lg: 12px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1e1e1c;
-      --bg2: #2a2a27;
-      --bg3: #333330;
-      --text: #f0ede8;
-      --text2: #9e9b96;
-      --border: rgba(255,255,255,0.12);
-      --border2: rgba(255,255,255,0.22);
-      --blue-bg: #0c2a47;
-      --blue-text: #85B7EB;
-      --green-bg: #1a3009;
-      --green-text: #C0DD97;
-      --red-bg: #3d1414;
-      --red-text: #F09595;
+      --bg: #1e1e1c; --bg2: #2a2a27; --bg3: #333330;
+      --text: #f0ede8; --text2: #9e9b96;
+      --border: rgba(255,255,255,0.12); --border2: rgba(255,255,255,0.22);
+      --blue-bg: #0c2a47; --blue-text: #85B7EB;
+      --green-bg: #1a3009; --green-text: #C0DD97;
+      --red-bg: #3d1414; --red-text: #F09595;
     }
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,9 +30,13 @@
   .app-wrap { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
   .app-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1.5rem; padding: 1rem 1.25rem; background: var(--bg); border-radius: var(--radius-lg); border: 0.5px solid var(--border); }
   .app-logo { width: 44px; height: 44px; border-radius: var(--radius); background: var(--blue); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; flex-shrink: 0; }
-  .app-title { font-size: 20px; font-weight: 600; color: var(--text); }
+  .app-title { font-size: 20px; font-weight: 600; }
   .app-subtitle { font-size: 12px; color: var(--text2); margin-top: 2px; }
   .rec-count { margin-left: auto; font-size: 12px; color: var(--text2); background: var(--bg2); padding: 4px 12px; border-radius: 20px; }
+  .sync-status { font-size: 11px; padding: 3px 10px; border-radius: 20px; margin-left: 8px; }
+  .sync-ok { background: var(--green-bg); color: var(--green-text); }
+  .sync-err { background: var(--red-bg); color: var(--red-text); }
+  .sync-loading { background: var(--blue-bg); color: var(--blue-text); }
 
   .tab-bar { display: flex; gap: 4px; background: var(--bg); padding: 6px; border-radius: var(--radius-lg); border: 0.5px solid var(--border); margin-bottom: 1.25rem; }
   .tab { flex: 1; padding: 9px 12px; font-size: 13px; cursor: pointer; border: none; background: none; color: var(--text2); border-radius: var(--radius); transition: all .15s; font-family: inherit; }
@@ -59,7 +45,7 @@
   .panel { display: none; } .panel.active { display: block; }
 
   .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
-  .section-title { font-size: 15px; font-weight: 600; margin-bottom: 14px; color: var(--text); }
+  .section-title { font-size: 15px; font-weight: 600; margin-bottom: 14px; }
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .form-group { display: flex; flex-direction: column; gap: 5px; }
   .form-group.full { grid-column: 1 / -1; }
@@ -68,8 +54,7 @@
     width: 100%; padding: 8px 11px;
     border: 0.5px solid var(--border2); border-radius: var(--radius);
     background: var(--bg); color: var(--text);
-    font-size: 13px; font-family: inherit;
-    transition: border-color .15s;
+    font-size: 13px; font-family: inherit; transition: border-color .15s;
   }
   select:focus, input:focus, textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
   textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
@@ -88,8 +73,6 @@
   .table-wrap { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-size: 12px; }
   th { text-align: left; padding: 9px 10px; border-bottom: 0.5px solid var(--border); font-weight: 600; font-size: 11px; color: var(--text2); white-space: nowrap; background: var(--bg2); }
-  th:first-child { border-radius: var(--radius) 0 0 0; }
-  th:last-child { border-radius: 0 var(--radius) 0 0; }
   td { padding: 9px 10px; border-bottom: 0.5px solid var(--border); vertical-align: top; word-break: break-word; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--bg2); }
@@ -130,6 +113,11 @@
   .toast { position: fixed; bottom: 24px; right: 24px; background: #1a1a18; color: #fff; padding: 11px 18px; border-radius: var(--radius); font-size: 13px; z-index: 999; opacity: 0; transform: translateY(8px); transition: all .25s; pointer-events: none; }
   .toast.show { opacity: 1; transform: translateY(0); }
 
+  .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+  .loading-box { background: var(--bg); border-radius: var(--radius-lg); padding: 24px 32px; text-align: center; font-size: 14px; }
+  .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   @media (max-width: 600px) {
     .form-grid { grid-template-columns: 1fr; }
     .teras-grid { grid-template-columns: 1fr; }
@@ -146,7 +134,11 @@
       <div class="app-title">SSP2030 Monitoring — Year 2026</div>
       <div class="app-subtitle">Strategic Plan 2030 Achievement Progress Tracker</div>
     </div>
-    <div class="rec-count" id="rec-count">0 rekod</div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+      <div class="rec-count" id="rec-count">0 rekod</div>
+      <div class="sync-status sync-loading" id="sync-status">⟳ Memuatkan...</div>
+      <button class="btn btn-sm" onclick="loadFromSheets()" title="Refresh data"><i class="ti ti-refresh"></i></button>
+    </div>
   </div>
 
   <div class="tab-bar">
@@ -243,7 +235,7 @@
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
         <div class="section-title" style="margin-bottom:0"><i class="ti ti-list" style="color:var(--blue);margin-right:6px"></i>Rekod Tersimpan</div>
       </div>
-      <div id="entry-list"><div class="empty">Tiada rekod lagi. Isi borang di atas dan simpan.</div></div>
+      <div id="entry-list"><div class="empty">Tiada rekod lagi.</div></div>
     </div>
   </div>
 
@@ -343,16 +335,62 @@
 
 </div>
 
-<div class="toast" id="toast">Rekod disimpan!</div>
+<div class="toast" id="toast"></div>
 
 <script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxyrlUIbbs2h9azgT2Z1yXFCekdIB-7WbEP_lxHjiELnQwR1ubI1l2l-5Gkz4bMI1-4/exec';
 let records = [];
 let editId = null;
-const STORAGE_KEY = 'ssp2030_records_2026';
 
 function getGrade(a){ return a>=71?'Achieve':a>=36?'Moderate':'Weak'; }
 function getBadge(g){ return g==='Achieve'?'badge-achieve':g==='Moderate'?'badge-moderate':'badge-weak'; }
 function getColor(a){ return a>=71?'#3B6D11':a>=36?'#185FA5':'#A32D2D'; }
+
+function setSyncStatus(type, msg){
+  const el = document.getElementById('sync-status');
+  el.className = 'sync-status sync-' + type;
+  el.textContent = msg;
+}
+
+async function loadFromSheets(){
+  setSyncStatus('loading','⟳ Memuatkan...');
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=get', {method:'GET'});
+    const data = await res.json();
+    if(Array.isArray(data) && data.length > 1){
+      records = data.slice(1).filter(r=>r[0]).map(r=>({
+        id: Number(r[0]),
+        quarter: r[1]||'', division: r[2]||'', pillar: r[3]||'',
+        initiative: r[4]||'', program: r[5]||'',
+        achievement: parseFloat(r[6])||0, target: parseFloat(r[7])||0,
+        actual: parseFloat(r[8])||0, grade: r[9]||'',
+        status: r[10]||'', challenge: r[11]||'', tackle: r[12]||''
+      }));
+    } else { records = []; }
+    setSyncStatus('ok','✓ Tersambung');
+    renderAll();
+  } catch(e){
+    setSyncStatus('err','✗ Gagal sambung');
+    const local = localStorage.getItem('ssp2030_backup');
+    if(local){ records = JSON.parse(local); renderAll(); }
+  }
+}
+
+async function saveToSheets(){
+  setSyncStatus('loading','⟳ Menyimpan...');
+  try {
+    await fetch(SCRIPT_URL, {
+      method:'POST',
+      body: JSON.stringify({action:'save', records}),
+      headers:{'Content-Type':'text/plain'}
+    });
+    localStorage.setItem('ssp2030_backup', JSON.stringify(records));
+    setSyncStatus('ok','✓ Disimpan');
+  } catch(e){
+    setSyncStatus('err','✗ Gagal simpan');
+    localStorage.setItem('ssp2030_backup', JSON.stringify(records));
+  }
+}
 
 function calcActual(){
   const a=parseFloat(document.getElementById('f-achievement').value);
@@ -375,7 +413,7 @@ function clearForm(){
   document.getElementById('form-title').innerHTML='<i class="ti ti-plus" style="color:var(--blue);margin-right:6px"></i>Tambah Rekod Baru';
 }
 
-function saveRecord(){
+async function saveRecord(){
   const q=document.getElementById('f-quarter').value;
   const div=document.getElementById('f-division').value;
   const pil=document.getElementById('f-pillar').value;
@@ -386,22 +424,28 @@ function saveRecord(){
   const actual=t>0?parseFloat((a/t*100).toFixed(1)):0;
   const rec={
     id:editId||Date.now(),
-    quarter:q,division:div,pillar:pil,initiative:init,
+    quarter:q, division:div, pillar:pil, initiative:init,
     program:document.getElementById('f-program').value.trim(),
-    achievement:a,target:t,actual,grade:getGrade(actual),
+    achievement:a, target:t, actual, grade:getGrade(actual),
     status:document.getElementById('f-status').value.trim(),
     challenge:document.getElementById('f-challenge').value.trim(),
     tackle:document.getElementById('f-tackle').value.trim()
   };
   if(editId){const idx=records.findIndex(r=>r.id===editId);if(idx>=0)records[idx]=rec;}
   else{records.push(rec);}
-  save();clearForm();renderAll();
-  showToast(editId?'Rekod dikemaskini!':'Rekod disimpan!');editId=null;
+  const wasEdit=editId;
+  clearForm();
+  renderAll();
+  showToast(wasEdit?'Rekod dikemaskini!':'Rekod disimpan!');
+  await saveToSheets();
 }
 
-function deleteRecord(id){
+async function deleteRecord(id){
   if(!confirm('Padam rekod ini?'))return;
-  records=records.filter(r=>r.id!==id);save();renderAll();
+  records=records.filter(r=>r.id!==id);
+  renderAll();
+  await saveToSheets();
+  showToast('Rekod dipadam.');
 }
 
 function editRecord(id){
@@ -496,7 +540,6 @@ function renderDashboard(){
     <div class="metric"><div class="metric-label" style="color:var(--green-text)">▲ Achieve</div><div class="metric-value">${achieve}</div><div class="metric-sub">${(achieve/n*100).toFixed(0)}% daripada rekod</div></div>
     <div class="metric"><div class="metric-label" style="color:var(--blue)">● Moderate</div><div class="metric-value">${moderate}</div><div class="metric-sub">${(moderate/n*100).toFixed(0)}% daripada rekod</div></div>
     <div class="metric"><div class="metric-label" style="color:var(--red)">▼ Weak</div><div class="metric-value">${weak}</div><div class="metric-sub">${(weak/n*100).toFixed(0)}% daripada rekod</div></div>`;
-
   const teras=['TERAS 1 - KEMAMPANAN KEWANGAN','TERAS 2 - KEMAMPANAN INDUSTRI','TERAS 3 - KECEKAPAN OPERASI','TERAS 4 - PEMERKASAAN TADBIR URUS'];
   t.innerHTML=teras.map(tr=>{
     const recs=records.filter(r=>r.pillar===tr);
@@ -510,10 +553,9 @@ function renderDashboard(){
       <div style="font-size:11px;color:var(--text2);margin-top:6px">${getGrade(a)} · ${recs.length} inisiatif</div>
     </div>`;
   }).join('');
-
   const im={};
   records.forEach(r=>{
-    if(!im[r.initiative])im[r.initiative]={name:r.initiative,pillar:r.pillar,vals:[],statuses:[]};
+    if(!im[r.initiative])im[r.initiative]={name:r.initiative,vals:[],statuses:[]};
     im[r.initiative].vals.push(r.actual);
     if(r.status)im[r.initiative].statuses.push(r.status);
   });
@@ -557,10 +599,7 @@ function exportCSV(){
   a.download='SSP2030_Monitoring_2026.csv';a.click();
 }
 
-function save(){ try{localStorage.setItem(STORAGE_KEY,JSON.stringify(records));}catch(e){} }
-function load(){ try{const d=localStorage.getItem(STORAGE_KEY);if(d)records=JSON.parse(d);}catch(e){records=[];} renderAll(); }
-
-load();
+loadFromSheets();
 </script>
 </body>
 </html>
