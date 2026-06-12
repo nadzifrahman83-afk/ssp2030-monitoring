@@ -3,167 +3,882 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SSP2030 Monitoring — Year 2026</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<title>SSP2030 | SPAN Monitoring System 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #ffffff; --bg2: #f5f5f3; --bg3: #eeecea;
-    --text: #1a1a18; --text2: #6b6b67;
-    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
-    --blue: #185FA5; --blue-bg: #E6F1FB; --blue-text: #0C447C;
-    --green: #3B6D11; --green-bg: #EAF3DE; --green-text: #27500A;
-    --red: #A32D2D; --red-bg: #FCEBEB; --red-text: #791F1F;
-    --radius: 8px; --radius-lg: 12px;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1e1e1c; --bg2: #2a2a27; --bg3: #333330;
-      --text: #f0ede8; --text2: #9e9b96;
-      --border: rgba(255,255,255,0.12); --border2: rgba(255,255,255,0.22);
-      --blue-bg: #0c2a47; --blue-text: #85B7EB;
-      --green-bg: #1a3009; --green-text: #C0DD97;
-      --red-bg: #3d1414; --red-text: #F09595;
-    }
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; background: var(--bg3); color: var(--text); min-height: 100vh; }
-  .app-wrap { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-  .app-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1.5rem; padding: 1rem 1.25rem; background: var(--bg); border-radius: var(--radius-lg); border: 0.5px solid var(--border); }
-  .app-logo { width: 44px; height: 44px; border-radius: var(--radius); background: var(--blue); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; flex-shrink: 0; }
-  .app-title { font-size: 20px; font-weight: 600; }
-  .app-subtitle { font-size: 12px; color: var(--text2); margin-top: 2px; }
-  .rec-count { margin-left: auto; font-size: 12px; color: var(--text2); background: var(--bg2); padding: 4px 12px; border-radius: 20px; }
-  .sync-status { font-size: 11px; padding: 3px 10px; border-radius: 20px; margin-left: 8px; }
-  .sync-ok { background: var(--green-bg); color: var(--green-text); }
-  .sync-err { background: var(--red-bg); color: var(--red-text); }
-  .sync-loading { background: var(--blue-bg); color: var(--blue-text); }
+/* ═══════════════════════════════════════════
+   SPAN SSP2030 — DESIGN TOKENS
+   Palette: Deep Ocean Blue + Aqua Teal + White
+   Glassmorphism Premium Light Mode
+═══════════════════════════════════════════ */
+:root {
+  /* SPAN Brand Colours */
+  --span-navy:       #003B6F;
+  --span-blue:       #005DA4;
+  --span-mid:        #0077C8;
+  --span-teal:       #00A3A3;
+  --span-aqua:       #00C2CB;
+  --span-light:      #E8F4FD;
+  --span-lighter:    #F0F9FF;
 
-  .tab-bar { display: flex; gap: 4px; background: var(--bg); padding: 6px; border-radius: var(--radius-lg); border: 0.5px solid var(--border); margin-bottom: 1.25rem; }
-  .tab { flex: 1; padding: 9px 12px; font-size: 13px; cursor: pointer; border: none; background: none; color: var(--text2); border-radius: var(--radius); transition: all .15s; font-family: inherit; }
-  .tab.active { background: var(--blue); color: #fff; font-weight: 500; }
-  .tab:hover:not(.active) { background: var(--bg2); color: var(--text); }
-  .panel { display: none; } .panel.active { display: block; }
+  /* Grading */
+  --achieve-dark:    #166534;
+  --achieve-mid:     #16A34A;
+  --achieve-bg:      #DCFCE7;
+  --achieve-border:  #86EFAC;
+  --moderate-dark:   #1E40AF;
+  --moderate-mid:    #2563EB;
+  --moderate-bg:     #DBEAFE;
+  --moderate-border: #93C5FD;
+  --weak-dark:       #991B1B;
+  --weak-mid:        #DC2626;
+  --weak-bg:         #FEE2E2;
+  --weak-border:     #FCA5A5;
 
-  .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
-  .section-title { font-size: 15px; font-weight: 600; margin-bottom: 14px; }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .form-group { display: flex; flex-direction: column; gap: 5px; }
-  .form-group.full { grid-column: 1 / -1; }
-  label { font-size: 12px; color: var(--text2); font-weight: 500; }
-  select, input[type=text], input[type=number], textarea {
-    width: 100%; padding: 8px 11px;
-    border: 0.5px solid var(--border2); border-radius: var(--radius);
-    background: var(--bg); color: var(--text);
-    font-size: 13px; font-family: inherit; transition: border-color .15s;
-  }
-  select:focus, input:focus, textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
-  textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
-  .computed { background: var(--bg2); cursor: default; }
-  .btn { padding: 8px 16px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); font-size: 13px; cursor: pointer; font-family: inherit; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; }
-  .btn:hover { background: var(--bg2); }
-  .btn-primary { background: var(--blue); color: #fff; border-color: var(--blue); }
-  .btn-primary:hover { background: var(--blue-text); }
-  .btn-danger { background: var(--red-bg); color: var(--red-text); border-color: transparent; }
-  .btn-sm { padding: 4px 10px; font-size: 11px; }
-  .form-actions { display: flex; gap: 8px; margin-top: 1.25rem; justify-content: flex-end; }
+  /* Surface */
+  --glass-white:     rgba(255,255,255,0.72);
+  --glass-blue:      rgba(0,93,164,0.06);
+  --glass-border:    rgba(255,255,255,0.85);
+  --glass-shadow:    0 8px 32px rgba(0,59,111,0.12), 0 2px 8px rgba(0,59,111,0.06);
+  --glass-shadow-lg: 0 20px 60px rgba(0,59,111,0.15), 0 4px 16px rgba(0,59,111,0.08);
 
-  .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1rem; align-items: flex-end; }
-  .filter-bar .form-group { flex: 1; min-width: 130px; }
+  /* Text */
+  --text-primary:    #0A1628;
+  --text-secondary:  #3D5A80;
+  --text-muted:      #7A94B0;
+  --text-white:      #FFFFFF;
 
-  .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  th { text-align: left; padding: 9px 10px; border-bottom: 0.5px solid var(--border); font-weight: 600; font-size: 11px; color: var(--text2); white-space: nowrap; background: var(--bg2); }
-  td { padding: 9px 10px; border-bottom: 0.5px solid var(--border); vertical-align: top; word-break: break-word; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: var(--bg2); }
+  /* Misc */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+  --radius-xl:  22px;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body:    'Inter', sans-serif;
+}
 
-  .badge { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 600; white-space: nowrap; }
-  .badge-achieve { background: var(--green-bg); color: var(--green-text); }
-  .badge-moderate { background: var(--blue-bg); color: var(--blue-text); }
-  .badge-weak { background: var(--red-bg); color: var(--red-text); }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
-  .metric { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
-  .metric-label { font-size: 11px; color: var(--text2); margin-bottom: 5px; font-weight: 500; }
-  .metric-value { font-size: 26px; font-weight: 600; line-height: 1; }
-  .metric-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
+body {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 120% 60% at 20% -10%, rgba(0,119,200,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 50% at 85% 10%, rgba(0,163,163,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(0,93,164,0.08) 0%, transparent 60%),
+    linear-gradient(160deg, #EBF5FF 0%, #F5FBFF 35%, #EEF8F8 70%, #F0F9FF 100%);
+  background-attachment: fixed;
+}
 
-  .teras-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 1.25rem; }
-  .teras-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
-  .teras-name { font-size: 11px; font-weight: 600; margin-bottom: 8px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.3px; }
-  .teras-pct { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-  .progress-bar { height: 7px; border-radius: 4px; background: var(--bg2); overflow: hidden; }
-  .progress-fill { height: 100%; border-radius: 4px; transition: width .4s ease; }
+/* ── ANIMATED BG BLOBS ── */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  animation: blobFloat 12s ease-in-out infinite alternate;
+}
+body::before {
+  width: 600px; height: 600px;
+  top: -200px; left: -150px;
+  background: radial-gradient(circle, rgba(0,119,200,0.10) 0%, transparent 70%);
+}
+body::after {
+  width: 500px; height: 500px;
+  bottom: -150px; right: -100px;
+  background: radial-gradient(circle, rgba(0,163,163,0.09) 0%, transparent 70%);
+  animation-delay: -6s;
+}
+@keyframes blobFloat {
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(30px, 20px) scale(1.05); }
+}
 
-  .chart-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 14px; font-size: 12px; color: var(--text2); }
-  .legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 4px; }
+.app-wrap {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+  position: relative;
+  z-index: 1;
+}
 
-  .initiative-list { display: flex; flex-direction: column; gap: 8px; }
-  .initiative-item { display: flex; align-items: center; gap: 10px; padding: 11px 13px; border: 0.5px solid var(--border); border-radius: var(--radius); background: var(--bg3); }
-  .init-name { font-size: 12px; font-weight: 500; min-width: 130px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .init-bar-wrap { flex: 1; height: 8px; border-radius: 4px; background: var(--bg); overflow: hidden; min-width: 80px; }
-  .init-bar-fill { height: 100%; border-radius: 4px; }
-  .init-pct { font-size: 14px; font-weight: 700; min-width: 52px; text-align: right; }
-  .init-status { font-size: 11px; color: var(--text2); max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* ══════════════════════════════
+   HEADER
+══════════════════════════════ */
+.app-header {
+  background: var(--glass-white);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow-lg);
+  padding: 0;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
 
-  .empty { text-align: center; padding: 2.5rem; color: var(--text2); font-size: 13px; }
-  .entry-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
-  .entry-row:last-child { border-bottom: none; }
+.header-top {
+  background: linear-gradient(135deg, var(--span-navy) 0%, var(--span-blue) 50%, var(--span-mid) 100%);
+  padding: 1.25rem 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.header-top::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.header-top::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; right: 120px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: rgba(0,194,203,0.12);
+}
 
-  .toast { position: fixed; bottom: 24px; right: 24px; background: #1a1a18; color: #fff; padding: 11px 18px; border-radius: var(--radius); font-size: 13px; z-index: 999; opacity: 0; transform: translateY(8px); transition: all .25s; pointer-events: none; }
-  .toast.show { opacity: 1; transform: translateY(0); }
+.header-logo {
+  width: 52px; height: 52px;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  backdrop-filter: blur(10px);
+  font-size: 24px;
+  position: relative; z-index: 1;
+}
+.header-text { position: relative; z-index: 1; }
+.header-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+.header-subtitle {
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  margin-top: 3px;
+  font-weight: 400;
+}
+.header-badges {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative; z-index: 1;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.hbadge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+.hbadge-year {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+}
+.hbadge-rec {
+  background: rgba(0,194,203,0.25);
+  border: 1px solid rgba(0,194,203,0.4);
+  color: #fff;
+}
+.sync-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all .2s;
+  border: 1px solid transparent;
+}
+.sync-ok     { background: rgba(22,163,74,0.15); border-color: rgba(22,163,74,0.3); color: #DCFCE7; }
+.sync-err    { background: rgba(220,38,38,0.2);  border-color: rgba(220,38,38,0.35); color: #FEE2E2; }
+.sync-loading{ background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; }
+.sync-dot { width: 6px; height: 6px; border-radius: 50%; }
+.sync-ok .sync-dot     { background: #4ADE80; box-shadow: 0 0 6px #4ADE80; animation: pulse-green 2s infinite; }
+.sync-err .sync-dot    { background: #F87171; }
+.sync-loading .sync-dot{ background: #fff; animation: pulse-white 1s infinite; }
+@keyframes pulse-green { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes pulse-white { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-  .loading-box { background: var(--bg); border-radius: var(--radius-lg); padding: 24px 32px; text-align: center; font-size: 14px; }
-  .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 12px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+.header-bottom {
+  padding: 10px 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-top: 1px solid rgba(0,59,111,0.06);
+  background: rgba(255,255,255,0.5);
+}
+.hb-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-right: 4px;
+}
+.hb-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--span-light);
+  color: var(--span-navy);
+  border: 1px solid rgba(0,93,164,0.12);
+}
 
-  @media (max-width: 600px) {
-    .form-grid { grid-template-columns: 1fr; }
-    .teras-grid { grid-template-columns: 1fr; }
-    .tab span { display: none; }
-  }
+/* ══════════════════════════════
+   TAB BAR
+══════════════════════════════ */
+.tab-bar {
+  display: flex;
+  gap: 6px;
+  background: var(--glass-white);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+  padding: 6px;
+  margin-bottom: 1.5rem;
+}
+.tab {
+  flex: 1;
+  padding: 11px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: var(--radius-lg);
+  transition: all .2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  letter-spacing: 0.1px;
+}
+.tab:hover:not(.active) {
+  background: rgba(0,93,164,0.06);
+  color: var(--span-blue);
+}
+.tab.active {
+  background: linear-gradient(135deg, var(--span-navy) 0%, var(--span-blue) 100%);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0,59,111,0.25), 0 2px 6px rgba(0,59,111,0.15);
+}
+.tab-icon { font-size: 15px; }
+
+.panel { display: none; }
+.panel.active { display: block; animation: fadeIn .2s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+/* ══════════════════════════════
+   GLASS CARD
+══════════════════════════════ */
+.card {
+  background: var(--glass-white);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.25rem;
+  transition: box-shadow .2s;
+}
+.card:hover { box-shadow: var(--glass-shadow-lg); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0,59,111,0.07);
+}
+.card-icon {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--span-blue), var(--span-teal));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,93,164,0.25);
+}
+.card-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.card-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+/* ══════════════════════════════
+   FORM ELEMENTS
+══════════════════════════════ */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-group.thirds { grid-column: span 1; }
+
+label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+select, input[type=text], input[type=number], textarea {
+  width: 100%;
+  padding: 9px 13px;
+  border: 1.5px solid rgba(0,93,164,0.15);
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.8);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: var(--font-body);
+  transition: all .18s;
+  backdrop-filter: blur(8px);
+}
+select:focus, input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--span-blue);
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 0 0 3px rgba(0,93,164,0.10), 0 2px 8px rgba(0,93,164,0.08);
+}
+select:hover, input:hover, textarea:hover {
+  border-color: rgba(0,93,164,0.3);
+}
+textarea { resize: vertical; min-height: 68px; line-height: 1.6; }
+
+.computed {
+  background: rgba(0,59,111,0.04) !important;
+  border-color: rgba(0,59,111,0.08) !important;
+  color: var(--span-navy) !important;
+  font-weight: 600;
+  cursor: default;
+}
+
+.form-section-label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--span-teal);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  grid-column: 1 / -1;
+  padding: 8px 0 2px;
+  border-bottom: 1px solid rgba(0,163,163,0.15);
+  margin-bottom: 2px;
+}
+
+/* ══════════════════════════════
+   BUTTONS
+══════════════════════════════ */
+.btn {
+  padding: 9px 18px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid rgba(0,93,164,0.18);
+  background: rgba(255,255,255,0.8);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all .18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  backdrop-filter: blur(8px);
+}
+.btn:hover {
+  background: rgba(255,255,255,0.95);
+  border-color: rgba(0,93,164,0.3);
+  box-shadow: 0 2px 8px rgba(0,59,111,0.1);
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--span-navy) 0%, var(--span-blue) 100%);
+  color: #fff;
+  border-color: transparent;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(0,59,111,0.25);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #002d56 0%, #004d8a 100%);
+  box-shadow: 0 6px 20px rgba(0,59,111,0.35);
+  transform: translateY(-1px);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-danger {
+  background: rgba(220,38,38,0.06);
+  color: var(--weak-dark);
+  border-color: rgba(220,38,38,0.2);
+}
+.btn-danger:hover {
+  background: rgba(220,38,38,0.12);
+  border-color: rgba(220,38,38,0.35);
+}
+.btn-sm { padding: 5px 11px; font-size: 11.5px; border-radius: var(--radius-sm); }
+.btn-icon { width: 32px; height: 32px; padding: 0; justify-content: center; border-radius: var(--radius-sm); }
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 1.5rem;
+  justify-content: flex-end;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(0,59,111,0.07);
+}
+
+/* ══════════════════════════════
+   ENTRY LIST ROWS
+══════════════════════════════ */
+.entry-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  margin-bottom: 6px;
+  background: rgba(0,59,111,0.02);
+  border: 1px solid rgba(0,59,111,0.06);
+  transition: all .15s;
+}
+.entry-row:hover {
+  background: rgba(0,93,164,0.05);
+  border-color: rgba(0,93,164,0.14);
+  box-shadow: 0 2px 8px rgba(0,59,111,0.07);
+}
+.entry-info { flex: 1; min-width: 0; }
+.entry-main {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.entry-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.entry-actions { display: flex; gap: 5px; flex-shrink: 0; }
+
+/* ══════════════════════════════
+   BADGES
+══════════════════════════════ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
+.badge-achieve  { background: var(--achieve-bg);  color: var(--achieve-dark);  border: 1px solid var(--achieve-border);  }
+.badge-achieve::before  { background: var(--achieve-mid); }
+.badge-moderate { background: var(--moderate-bg); color: var(--moderate-dark); border: 1px solid var(--moderate-border); }
+.badge-moderate::before { background: var(--moderate-mid); }
+.badge-weak     { background: var(--weak-bg);     color: var(--weak-dark);     border: 1px solid var(--weak-border);     }
+.badge-weak::before     { background: var(--weak-mid); }
+
+/* ══════════════════════════════
+   FILTER BAR
+══════════════════════════════ */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 1.25rem;
+  align-items: flex-end;
+  padding: 1rem 1.25rem;
+  background: rgba(0,59,111,0.03);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(0,59,111,0.07);
+}
+.filter-bar .form-group { flex: 1; min-width: 120px; }
+.filter-bar label { font-size: 10.5px; }
+
+/* ══════════════════════════════
+   TABLE
+══════════════════════════════ */
+.table-wrap { overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid rgba(0,59,111,0.08); }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+thead { background: linear-gradient(90deg, rgba(0,59,111,0.05) 0%, rgba(0,163,163,0.04) 100%); }
+th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--span-navy);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-bottom: 1.5px solid rgba(0,59,111,0.10);
+}
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(0,59,111,0.05);
+  vertical-align: middle;
+  color: var(--text-primary);
+}
+tr:last-child td { border-bottom: none; }
+tbody tr { transition: background .12s; }
+tbody tr:hover td { background: rgba(0,93,164,0.04); }
+
+/* ══════════════════════════════
+   METRICS
+══════════════════════════════ */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 1.25rem;
+}
+.metric {
+  background: var(--glass-white);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+  padding: 1.25rem 1.25rem 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: all .2s;
+}
+.metric:hover { transform: translateY(-2px); box-shadow: var(--glass-shadow-lg); }
+.metric::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+.metric-total::after  { background: linear-gradient(90deg, var(--span-navy), var(--span-mid)); }
+.metric-avg::after    { background: linear-gradient(90deg, var(--span-teal), var(--span-aqua)); }
+.metric-achieve::after{ background: linear-gradient(90deg, var(--achieve-mid), #4ADE80); }
+.metric-mod::after    { background: linear-gradient(90deg, var(--moderate-mid), #60A5FA); }
+.metric-weak::after   { background: linear-gradient(90deg, var(--weak-mid), #F87171); }
+
+.metric-label { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 0.3px; text-transform: uppercase; }
+.metric-value { font-family: var(--font-display); font-size: 30px; font-weight: 800; line-height: 1; color: var(--text-primary); }
+.metric-sub   { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+.metric-icon  { position: absolute; top: 1rem; right: 1rem; font-size: 20px; opacity: 0.12; }
+
+/* ══════════════════════════════
+   TERAS CARDS
+══════════════════════════════ */
+.teras-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 1.25rem;
+}
+.teras-card {
+  background: var(--glass-white);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+  padding: 1.25rem 1.4rem;
+  position: relative;
+  overflow: hidden;
+  transition: all .2s;
+}
+.teras-card:hover { transform: translateY(-2px); box-shadow: var(--glass-shadow-lg); }
+.teras-num {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--span-teal);
+  margin-bottom: 4px;
+}
+.teras-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+.teras-pct {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  line-height: 1;
+}
+.progress-track {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(0,59,111,0.08);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.progress-fill { height: 100%; border-radius: 4px; transition: width .6s cubic-bezier(.4,0,.2,1); }
+.teras-meta { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+.teras-bg-num {
+  position: absolute;
+  bottom: -10px; right: 8px;
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 900;
+  color: rgba(0,59,111,0.04);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ══════════════════════════════
+   INITIATIVE CHART
+══════════════════════════════ */
+.init-list { display: flex; flex-direction: column; gap: 8px; }
+.init-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(0,59,111,0.07);
+  transition: all .15s;
+  backdrop-filter: blur(8px);
+}
+.init-item:hover {
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(0,93,164,0.15);
+  box-shadow: 0 3px 12px rgba(0,59,111,0.08);
+  transform: translateX(2px);
+}
+.init-rank {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: rgba(0,59,111,0.07);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.init-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 140px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.init-bar-track {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  background: rgba(0,59,111,0.06);
+  overflow: hidden;
+  min-width: 80px;
+}
+.init-bar-fill { height: 100%; border-radius: 5px; transition: width .5s cubic-bezier(.4,0,.2,1); }
+.init-pct {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  min-width: 56px;
+  text-align: right;
+}
+.init-status-text {
+  font-size: 11px;
+  color: var(--text-muted);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════
+   LEGEND
+══════════════════════════════ */
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 1.25rem;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.legend-swatch {
+  width: 28px; height: 10px;
+  border-radius: 5px;
+}
+
+/* ══════════════════════════════
+   EMPTY STATE
+══════════════════════════════ */
+.empty {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.empty-icon { font-size: 36px; margin-bottom: 10px; opacity: 0.4; }
+.empty-title { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; }
+
+/* ══════════════════════════════
+   TOAST
+══════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  background: linear-gradient(135deg, var(--span-navy), var(--span-blue));
+  color: #fff;
+  padding: 13px 20px;
+  border-radius: var(--radius-lg);
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transition: all .25s cubic-bezier(.4,0,.2,1);
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0,59,111,0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 320px;
+}
+.toast.show { opacity: 1; transform: translateY(0) scale(1); }
+
+/* ══════════════════════════════
+   SECTION DIVIDER
+══════════════════════════════ */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,93,164,0.12) 30%, rgba(0,163,163,0.12) 70%, transparent);
+  margin: 1.25rem 0;
+}
+
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .teras-grid { grid-template-columns: 1fr; }
+  .tab span { display: none; }
+  .header-top { flex-wrap: wrap; }
+  .header-badges { width: 100%; }
+  .metric-grid { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body>
 <div class="app-wrap">
 
+  <!-- ═══ HEADER ═══ -->
   <div class="app-header">
-    <div class="app-logo"><i class="ti ti-chart-line"></i></div>
-    <div>
-      <div class="app-title">SSP2030 Monitoring — Year 2026</div>
-      <div class="app-subtitle">Strategic Plan 2030 Achievement Progress Tracker</div>
+    <div class="header-top">
+      <div class="header-logo">💧</div>
+      <div class="header-text">
+        <div class="header-title">SSP2030 Monitoring System</div>
+        <div class="header-subtitle">Suruhanjaya Perkhidmatan Air Negara · Sistem Pemantauan Pencapaian</div>
+      </div>
+      <div class="header-badges">
+        <span class="hbadge hbadge-year">📅 Tahun 2026</span>
+        <span class="hbadge hbadge-rec" id="rec-count">0 Rekod</span>
+        <div class="sync-pill sync-loading" id="sync-status" onclick="loadFromSheets()" title="Klik untuk refresh">
+          <span class="sync-dot"></span>
+          <span id="sync-text">Menyambung...</span>
+        </div>
+      </div>
     </div>
-    <div style="margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end">
-      <div class="rec-count" id="rec-count">0 rekod</div>
-      <div class="sync-status sync-loading" id="sync-status">⟳ Memuatkan...</div>
-      <button class="btn btn-sm" onclick="loadFromSheets()" title="Refresh data"><i class="ti ti-refresh"></i></button>
+    <div class="header-bottom">
+      <span class="hb-label">Teras:</span>
+      <span class="hb-tag">TERAS 1 · Kemampanan Kewangan</span>
+      <span class="hb-tag">TERAS 2 · Kemampanan Industri</span>
+      <span class="hb-tag">TERAS 3 · Kecekapan Operasi</span>
+      <span class="hb-tag">TERAS 4 · Pemerkasaan Tadbir Urus</span>
     </div>
   </div>
 
+  <!-- ═══ TABS ═══ -->
   <div class="tab-bar">
-    <button class="tab active" onclick="switchTab('entry')"><i class="ti ti-pencil"></i> <span>Data Entry</span></button>
-    <button class="tab" onclick="switchTab('report')"><i class="ti ti-table"></i> <span>Laporan</span></button>
-    <button class="tab" onclick="switchTab('dashboard')"><i class="ti ti-layout-dashboard"></i> <span>Dashboard</span></button>
+    <button class="tab active" onclick="switchTab('entry')">
+      <span class="tab-icon">✏️</span>
+      <span>Data Entry</span>
+    </button>
+    <button class="tab" onclick="switchTab('report')">
+      <span class="tab-icon">📋</span>
+      <span>Laporan</span>
+    </button>
+    <button class="tab" onclick="switchTab('dashboard')">
+      <span class="tab-icon">📊</span>
+      <span>Dashboard</span>
+    </button>
   </div>
 
-  <!-- PANEL 1: DATA ENTRY -->
+  <!-- ════════════════════════════════
+       PANEL 1: DATA ENTRY
+  ════════════════════════════════ -->
   <div id="panel-entry" class="panel active">
     <div class="card">
-      <div class="section-title" id="form-title"><i class="ti ti-plus" style="color:var(--blue);margin-right:6px"></i>Tambah Rekod Baru</div>
+      <div class="card-header">
+        <div class="card-icon">✏️</div>
+        <div>
+          <div class="card-title" id="form-title">Tambah Rekod Baru</div>
+          <div class="card-sub">Isi maklumat pencapaian inisiatif SSP2030</div>
+        </div>
+      </div>
+
       <div class="form-grid">
+        <div class="form-section-label">📁 Maklumat Asas</div>
+
         <div class="form-group">
-          <label>Suku Tahun (Quarter)</label>
+          <label>Suku Tahun</label>
           <select id="f-quarter">
-            <option value="">— pilih —</option>
+            <option value="">— Pilih Quarter —</option>
             <option>Quarter 1</option><option>Quarter 2</option>
             <option>Quarter 3</option><option>Quarter 4</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Bahagian (Division)</label>
+          <label>Bahagian</label>
           <select id="f-division">
-            <option value="">— pilih —</option>
+            <option value="">— Pilih Bahagian —</option>
             <option>Bahagian Teknikal</option>
             <option>Bahagian Operasi</option>
             <option>Bahagian Ekonomi</option>
@@ -181,7 +896,7 @@
         <div class="form-group">
           <label>Teras (Pillar)</label>
           <select id="f-pillar">
-            <option value="">— pilih —</option>
+            <option value="">— Pilih Teras —</option>
             <option>TERAS 1 - KEMAMPANAN KEWANGAN</option>
             <option>TERAS 2 - KEMAMPANAN INDUSTRI</option>
             <option>TERAS 3 - KECEKAPAN OPERASI</option>
@@ -189,15 +904,18 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Inisiatif (Initiative)</label>
-          <input type="text" id="f-initiative" placeholder="cth. Transformasi Digital">
+          <label>Inisiatif</label>
+          <input type="text" id="f-initiative" placeholder="Nama inisiatif...">
         </div>
         <div class="form-group full">
           <label>Program / Aktiviti</label>
-          <textarea id="f-program" rows="2" placeholder="Huraikan program atau aktiviti..."></textarea>
+          <textarea id="f-program" rows="2" placeholder="Huraikan program atau aktiviti yang dilaksanakan..."></textarea>
         </div>
+
+        <div class="form-section-label">📈 Data Pencapaian</div>
+
         <div class="form-group">
-          <label>Pencapaian / Achievement (%)</label>
+          <label>Pencapaian (%)</label>
           <input type="number" id="f-achievement" min="0" max="100" step="0.1" placeholder="0.0" oninput="calcActual()">
         </div>
         <div class="form-group">
@@ -205,54 +923,78 @@
           <input type="number" id="f-target" min="0" max="100" step="0.1" placeholder="100.0" oninput="calcActual()">
         </div>
         <div class="form-group">
-          <label>% Actual (dikira auto)</label>
+          <label>% Actual (Auto)</label>
           <input type="text" id="f-actual" class="computed" readonly placeholder="—">
         </div>
         <div class="form-group">
-          <label>Gred / Grade (auto)</label>
+          <label>Gred / Grade (Auto)</label>
           <input type="text" id="f-grade" class="computed" readonly placeholder="—">
         </div>
+
+        <div class="form-section-label">📝 Maklumat Lanjut</div>
+
         <div class="form-group full">
           <label>Status Pencapaian</label>
-          <textarea id="f-status" rows="2" placeholder="Huraikan status pencapaian..."></textarea>
+          <textarea id="f-status" rows="2" placeholder="Huraikan status pencapaian semasa..."></textarea>
         </div>
         <div class="form-group full">
           <label>Cabaran / Challenge</label>
-          <textarea id="f-challenge" rows="2" placeholder="Huraikan cabaran utama..."></textarea>
+          <textarea id="f-challenge" rows="2" placeholder="Nyatakan cabaran yang dihadapi..."></textarea>
         </div>
         <div class="form-group full">
-          <label>Tindakan Menangani / Tackle Action</label>
-          <textarea id="f-tackle" rows="2" placeholder="Huraikan tindakan yang diambil..."></textarea>
+          <label>Tindakan Menangani</label>
+          <textarea id="f-tackle" rows="2" placeholder="Huraikan tindakan yang diambil untuk menangani cabaran..."></textarea>
         </div>
       </div>
+
       <div class="form-actions">
-        <button class="btn" onclick="clearForm()"><i class="ti ti-x"></i> Batal</button>
-        <button class="btn btn-primary" id="save-btn" onclick="saveRecord()"><i class="ti ti-device-floppy"></i> Simpan Rekod</button>
+        <button class="btn" onclick="clearForm()">✕ &nbsp;Batal</button>
+        <button class="btn btn-primary" id="save-btn" onclick="saveRecord()">💾 &nbsp;Simpan Rekod</button>
       </div>
     </div>
 
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <div class="section-title" style="margin-bottom:0"><i class="ti ti-list" style="color:var(--blue);margin-right:6px"></i>Rekod Tersimpan</div>
+      <div class="card-header">
+        <div class="card-icon">📋</div>
+        <div>
+          <div class="card-title">Rekod Tersimpan</div>
+          <div class="card-sub" id="entry-sub">Semua rekod yang telah dimasukkan</div>
+        </div>
+        <button class="btn btn-sm" style="margin-left:auto" onclick="loadFromSheets()">🔄 Refresh</button>
       </div>
-      <div id="entry-list"><div class="empty">Tiada rekod lagi.</div></div>
+      <div id="entry-list">
+        <div class="empty">
+          <div class="empty-icon">📂</div>
+          <div class="empty-title">Tiada rekod lagi</div>
+          <div>Isi borang di atas dan klik Simpan Rekod</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- PANEL 2: REPORT -->
+  <!-- ════════════════════════════════
+       PANEL 2: REPORT
+  ════════════════════════════════ -->
   <div id="panel-report" class="panel">
     <div class="card">
-      <div class="section-title"><i class="ti ti-filter" style="color:var(--blue);margin-right:6px"></i>Penapis Laporan</div>
+      <div class="card-header">
+        <div class="card-icon">🔍</div>
+        <div>
+          <div class="card-title">Laporan Pencapaian</div>
+          <div class="card-sub">Tapis dan semak rekod mengikut kriteria</div>
+        </div>
+        <button class="btn btn-sm" style="margin-left:auto" onclick="exportCSV()">⬇️ &nbsp;Export CSV</button>
+      </div>
       <div class="filter-bar">
         <div class="form-group" style="min-width:110px">
           <label>Quarter</label>
           <select id="r-quarter" onchange="renderReport()">
-            <option value="">Semua</option>
+            <option value="">Semua Quarter</option>
             <option>Quarter 1</option><option>Quarter 2</option>
             <option>Quarter 3</option><option>Quarter 4</option>
           </select>
         </div>
-        <div class="form-group" style="min-width:200px">
+        <div class="form-group" style="min-width:190px">
           <label>Bahagian</label>
           <select id="r-division" onchange="renderReport()">
             <option value="">Semua Bahagian</option>
@@ -270,7 +1012,7 @@
             <option>Bahagian Integriti dan Pengurusan Risiko</option>
           </select>
         </div>
-        <div class="form-group" style="min-width:180px">
+        <div class="form-group" style="min-width:170px">
           <label>Teras</label>
           <select id="r-pillar" onchange="renderReport()">
             <option value="">Semua Teras</option>
@@ -281,59 +1023,91 @@
           </select>
         </div>
         <div class="form-group" style="min-width:120px">
-          <label>Status</label>
+          <label>Status Gred</label>
           <select id="r-status" onchange="renderReport()">
             <option value="">Semua Status</option>
-            <option value="achieve">Achieve</option>
-            <option value="moderate">Moderate</option>
-            <option value="weak">Weak</option>
+            <option value="achieve">✅ Achieve</option>
+            <option value="moderate">🔵 Moderate</option>
+            <option value="weak">🔴 Weak</option>
           </select>
-        </div>
-        <div class="form-group" style="min-width:80px;justify-content:flex-end">
-          <label>&nbsp;</label>
-          <button class="btn" onclick="exportCSV()"><i class="ti ti-download"></i> CSV</button>
         </div>
       </div>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th style="width:80px">Quarter</th>
-              <th style="width:130px">Bahagian</th>
-              <th style="width:80px">Teras</th>
+              <th style="width:78px">Quarter</th>
+              <th style="width:125px">Bahagian</th>
+              <th style="width:72px">Teras</th>
               <th style="width:120px">Inisiatif</th>
-              <th style="width:65px;text-align:center">Capai.%</th>
-              <th style="width:60px;text-align:center">Sasar.%</th>
-              <th style="width:65px;text-align:center">% Actual</th>
-              <th style="width:80px">Gred</th>
-              <th style="width:110px">Status</th>
-              <th style="width:55px">Aksi</th>
+              <th style="width:62px;text-align:center">Capai%</th>
+              <th style="width:58px;text-align:center">Sasar%</th>
+              <th style="width:62px;text-align:center">Actual%</th>
+              <th style="width:85px">Gred</th>
+              <th style="width:100px">Status</th>
+              <th style="width:50px">Aksi</th>
             </tr>
           </thead>
           <tbody id="report-body"></tbody>
         </table>
       </div>
-      <div id="report-empty" class="empty" style="display:none">Tiada rekod sepadan dengan penapis yang dipilih.</div>
-      <div id="report-count" style="font-size:12px;color:var(--text2);margin-top:10px;text-align:right"></div>
-    </div>
-  </div>
-
-  <!-- PANEL 3: DASHBOARD -->
-  <div id="panel-dashboard" class="panel">
-    <div class="metric-grid" id="dash-metrics"></div>
-    <div class="teras-grid" id="dash-teras"></div>
-    <div class="card">
-      <div class="section-title"><i class="ti ti-chart-bar" style="color:var(--blue);margin-right:6px"></i>Carta Pencapaian Inisiatif</div>
-      <div class="chart-legend">
-        <span><span class="legend-dot" style="background:#3B6D11"></span>Achieve (71% – 100%)</span>
-        <span><span class="legend-dot" style="background:#185FA5"></span>Moderate (36% – 70%)</span>
-        <span><span class="legend-dot" style="background:#A32D2D"></span>Weak (0% – 35%)</span>
+      <div id="report-empty" style="display:none">
+        <div class="empty">
+          <div class="empty-icon">🔍</div>
+          <div class="empty-title">Tiada rekod dijumpai</div>
+          <div>Cuba tukar kriteria penapis</div>
+        </div>
       </div>
-      <div id="dash-initiatives"><div class="empty">Tiada data lagi.</div></div>
+      <div id="report-count" style="font-size:12px;color:var(--text-muted);margin-top:10px;text-align:right;padding:0 2px"></div>
     </div>
   </div>
 
-</div>
+  <!-- ════════════════════════════════
+       PANEL 3: DASHBOARD
+  ════════════════════════════════ -->
+  <div id="panel-dashboard" class="panel">
+    <div class="metric-grid" id="dash-metrics">
+      <div class="empty" style="grid-column:1/-1">
+        <div class="empty-icon">📊</div>
+        <div class="empty-title">Tiada data</div>
+        <div>Tambah rekod dalam panel Data Entry</div>
+      </div>
+    </div>
+
+    <div class="teras-grid" id="dash-teras"></div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+        <div>
+          <div class="card-title">Carta Pencapaian Inisiatif</div>
+          <div class="card-sub">Prestasi keseluruhan mengikut inisiatif — disusun dari tertinggi</div>
+        </div>
+      </div>
+      <div class="legend-row">
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:linear-gradient(90deg,#166534,#16A34A)"></div>
+          <span>Achieve &nbsp;(71% – 100%)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:linear-gradient(90deg,#1E40AF,#2563EB)"></div>
+          <span>Moderate (36% – 70%)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:linear-gradient(90deg,#991B1B,#DC2626)"></div>
+          <span>Weak &nbsp;&nbsp;&nbsp;&nbsp;(0% – 35%)</span>
+        </div>
+      </div>
+      <div id="dash-initiatives">
+        <div class="empty">
+          <div class="empty-icon">📈</div>
+          <div class="empty-title">Tiada data lagi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end app-wrap -->
 
 <div class="toast" id="toast"></div>
 
@@ -342,88 +1116,63 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySy_gTqiajPpQCJ5_QA
 let records = [];
 let editId = null;
 
+/* ── HELPERS ── */
 function getGrade(a){ return a>=71?'Achieve':a>=36?'Moderate':'Weak'; }
 function getBadge(g){ return g==='Achieve'?'badge-achieve':g==='Moderate'?'badge-moderate':'badge-weak'; }
-function getColor(a){ return a>=71?'#3B6D11':a>=36?'#185FA5':'#A32D2D'; }
+function getColor(a){ return a>=71?'#16A34A':a>=36?'#2563EB':'#DC2626'; }
+function getGradient(a){
+  if(a>=71) return 'linear-gradient(90deg,#166534,#16A34A)';
+  if(a>=36) return 'linear-gradient(90deg,#1E40AF,#2563EB)';
+  return 'linear-gradient(90deg,#991B1B,#DC2626)';
+}
+function getThinShort(str){ return str.replace('Bahagian ','').replace(' dan Transformasi',''); }
+function getTeras(str){ return str.split(' - ')[0]; }
 
+/* ── SYNC STATUS ── */
 function setSyncStatus(type, msg){
   const el = document.getElementById('sync-status');
-  el.className = 'sync-status sync-' + type;
-  el.textContent = msg;
+  el.className = 'sync-pill sync-' + type;
+  document.getElementById('sync-text').textContent = msg;
 }
 
-async function loadFromSheets(){
-  setSyncStatus('loading','⟳ Memuatkan...');
-  try {
-    const res = await fetch(SCRIPT_URL + '?action=get', {method:'GET'});
-    const data = await res.json();
-    if(Array.isArray(data) && data.length > 1){
-      records = data.slice(1).filter(r=>r[0]).map(r=>({
-        id: Number(r[0]),
-        quarter: r[1]||'', division: r[2]||'', pillar: r[3]||'',
-        initiative: r[4]||'', program: r[5]||'',
-        achievement: parseFloat(r[6])||0, target: parseFloat(r[7])||0,
-        actual: parseFloat(r[8])||0, grade: r[9]||'',
-        status: r[10]||'', challenge: r[11]||'', tackle: r[12]||''
-      }));
-    } else { records = []; }
-    setSyncStatus('ok','✓ Tersambung');
-    renderAll();
-  } catch(e){
-    setSyncStatus('err','✗ Gagal sambung');
-    const local = localStorage.getItem('ssp2030_backup');
-    if(local){ records = JSON.parse(local); renderAll(); }
-  }
-}
-
-async function saveToSheets(){
-  setSyncStatus('loading','⟳ Menyimpan...');
-  try {
-    await fetch(SCRIPT_URL, {
-      method:'POST',
-      body: JSON.stringify({action:'save', records}),
-      headers:{'Content-Type':'text/plain'}
-    });
-    localStorage.setItem('ssp2030_backup', JSON.stringify(records));
-    setSyncStatus('ok','✓ Disimpan');
-  } catch(e){
-    setSyncStatus('err','✗ Gagal simpan');
-    localStorage.setItem('ssp2030_backup', JSON.stringify(records));
-  }
-}
-
+/* ── CALC ── */
 function calcActual(){
-  const a=parseFloat(document.getElementById('f-achievement').value);
-  const t=parseFloat(document.getElementById('f-target').value);
-  if(!isNaN(a)&&!isNaN(t)&&t>0){
-    const pct=(a/t*100);
-    document.getElementById('f-actual').value=pct.toFixed(1)+'%';
-    document.getElementById('f-grade').value=getGrade(pct);
+  const a = parseFloat(document.getElementById('f-achievement').value);
+  const t = parseFloat(document.getElementById('f-target').value);
+  if(!isNaN(a) && !isNaN(t) && t > 0){
+    const pct = (a/t*100);
+    const grade = getGrade(pct);
+    document.getElementById('f-actual').value = pct.toFixed(1) + '%';
+    document.getElementById('f-grade').value = grade;
+    document.getElementById('f-grade').style.color = getColor(pct);
   } else {
-    document.getElementById('f-actual').value='—';
-    document.getElementById('f-grade').value='—';
+    document.getElementById('f-actual').value = '—';
+    document.getElementById('f-grade').value = '—';
+    document.getElementById('f-grade').style.color = '';
   }
 }
 
+/* ── CLEAR FORM ── */
 function clearForm(){
   ['f-quarter','f-division','f-pillar'].forEach(id=>document.getElementById(id).value='');
-  ['f-initiative','f-program','f-achievement','f-target','f-actual','f-grade','f-status','f-challenge','f-tackle'].forEach(id=>document.getElementById(id).value='');
-  editId=null;
-  document.getElementById('save-btn').innerHTML='<i class="ti ti-device-floppy"></i> Simpan Rekod';
-  document.getElementById('form-title').innerHTML='<i class="ti ti-plus" style="color:var(--blue);margin-right:6px"></i>Tambah Rekod Baru';
+  ['f-initiative','f-program','f-achievement','f-target','f-actual','f-grade','f-status','f-challenge','f-tackle'].forEach(id=>{ document.getElementById(id).value=''; document.getElementById(id).style.color=''; });
+  editId = null;
+  document.getElementById('save-btn').innerHTML = '💾 &nbsp;Simpan Rekod';
+  document.getElementById('form-title').textContent = 'Tambah Rekod Baru';
 }
 
+/* ── SAVE ── */
 async function saveRecord(){
-  const q=document.getElementById('f-quarter').value;
-  const div=document.getElementById('f-division').value;
-  const pil=document.getElementById('f-pillar').value;
-  const init=document.getElementById('f-initiative').value.trim();
-  if(!q||!div||!pil||!init){alert('Sila isi: Quarter, Bahagian, Teras, dan Inisiatif.');return;}
-  const a=parseFloat(document.getElementById('f-achievement').value)||0;
-  const t=parseFloat(document.getElementById('f-target').value)||0;
-  const actual=t>0?parseFloat((a/t*100).toFixed(1)):0;
-  const rec={
-    id:editId||Date.now(),
+  const q   = document.getElementById('f-quarter').value;
+  const div = document.getElementById('f-division').value;
+  const pil = document.getElementById('f-pillar').value;
+  const init= document.getElementById('f-initiative').value.trim();
+  if(!q||!div||!pil||!init){ showToast('⚠️  Sila lengkapkan Quarter, Bahagian, Teras & Inisiatif'); return; }
+  const a = parseFloat(document.getElementById('f-achievement').value)||0;
+  const t = parseFloat(document.getElementById('f-target').value)||0;
+  const actual = t>0 ? parseFloat((a/t*100).toFixed(1)) : 0;
+  const rec = {
+    id: editId||Date.now(),
     quarter:q, division:div, pillar:pil, initiative:init,
     program:document.getElementById('f-program').value.trim(),
     achievement:a, target:t, actual, grade:getGrade(actual),
@@ -431,172 +1180,275 @@ async function saveRecord(){
     challenge:document.getElementById('f-challenge').value.trim(),
     tackle:document.getElementById('f-tackle').value.trim()
   };
-  if(editId){const idx=records.findIndex(r=>r.id===editId);if(idx>=0)records[idx]=rec;}
-  else{records.push(rec);}
-  const wasEdit=editId;
-  clearForm();
-  renderAll();
-  showToast(wasEdit?'Rekod dikemaskini!':'Rekod disimpan!');
+  const wasEdit = editId;
+  if(editId){ const idx=records.findIndex(r=>r.id===editId); if(idx>=0)records[idx]=rec; }
+  else{ records.push(rec); }
+  clearForm(); renderAll();
+  showToast(wasEdit ? '✅  Rekod berjaya dikemaskini' : '✅  Rekod berjaya disimpan');
   await saveToSheets();
 }
 
+/* ── DELETE ── */
 async function deleteRecord(id){
-  if(!confirm('Padam rekod ini?'))return;
-  records=records.filter(r=>r.id!==id);
-  renderAll();
+  if(!confirm('Padam rekod ini?')) return;
+  records = records.filter(r=>r.id!==id);
+  renderAll(); showToast('🗑️  Rekod dipadam');
   await saveToSheets();
-  showToast('Rekod dipadam.');
 }
 
+/* ── EDIT ── */
 function editRecord(id){
-  const r=records.find(x=>x.id===id);if(!r)return;
-  document.getElementById('f-quarter').value=r.quarter;
-  document.getElementById('f-division').value=r.division;
-  document.getElementById('f-pillar').value=r.pillar;
-  document.getElementById('f-initiative').value=r.initiative;
-  document.getElementById('f-program').value=r.program;
+  const r = records.find(x=>x.id===id); if(!r) return;
+  document.getElementById('f-quarter').value   = r.quarter;
+  document.getElementById('f-division').value  = r.division;
+  document.getElementById('f-pillar').value    = r.pillar;
+  document.getElementById('f-initiative').value= r.initiative;
+  document.getElementById('f-program').value   = r.program;
   document.getElementById('f-achievement').value=r.achievement;
-  document.getElementById('f-target').value=r.target;
-  document.getElementById('f-actual').value=r.actual.toFixed(1)+'%';
-  document.getElementById('f-grade').value=r.grade;
-  document.getElementById('f-status').value=r.status;
-  document.getElementById('f-challenge').value=r.challenge;
-  document.getElementById('f-tackle').value=r.tackle;
-  editId=id;
-  document.getElementById('save-btn').innerHTML='<i class="ti ti-pencil"></i> Kemaskini Rekod';
-  document.getElementById('form-title').innerHTML='<i class="ti ti-pencil" style="color:var(--blue);margin-right:6px"></i>Edit Rekod';
+  document.getElementById('f-target').value    = r.target;
+  document.getElementById('f-actual').value    = r.actual.toFixed(1)+'%';
+  document.getElementById('f-grade').value     = r.grade;
+  document.getElementById('f-grade').style.color = getColor(r.actual);
+  document.getElementById('f-status').value    = r.status;
+  document.getElementById('f-challenge').value = r.challenge;
+  document.getElementById('f-tackle').value    = r.tackle;
+  editId = id;
+  document.getElementById('save-btn').innerHTML = '✏️ &nbsp;Kemaskini Rekod';
+  document.getElementById('form-title').textContent = 'Edit Rekod';
   switchTab('entry');
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
+/* ── RENDER ENTRY LIST ── */
 function renderEntryList(){
-  const el=document.getElementById('entry-list');
-  document.getElementById('rec-count').textContent=records.length+' rekod';
-  if(!records.length){el.innerHTML='<div class="empty">Tiada rekod lagi.</div>';return;}
-  el.innerHTML=records.slice().reverse().map(r=>`
+  const el = document.getElementById('entry-list');
+  const n = records.length;
+  document.getElementById('rec-count').textContent = n + ' Rekod';
+  document.getElementById('entry-sub').textContent = n ? n + ' rekod dijumpai' : 'Tiada rekod lagi';
+  if(!n){
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📂</div><div class="empty-title">Tiada rekod lagi</div><div>Isi borang di atas dan klik Simpan Rekod</div></div>`;
+    return;
+  }
+  el.innerHTML = records.slice().reverse().map(r=>`
     <div class="entry-row">
       <span class="badge ${getBadge(r.grade)}">${r.grade}</span>
-      <span style="font-size:12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-        <b>${r.quarter}</b> · ${r.division.replace('Bahagian ','')} · ${r.pillar.split(' - ')[0]} · <b>${r.initiative}</b> — ${r.actual.toFixed(1)}%
-      </span>
-      <button class="btn btn-sm" onclick="editRecord(${r.id})" title="Edit"><i class="ti ti-pencil"></i></button>
-      <button class="btn btn-sm btn-danger" onclick="deleteRecord(${r.id})" title="Padam"><i class="ti ti-trash"></i></button>
+      <div class="entry-info">
+        <div class="entry-main">${r.initiative}</div>
+        <div class="entry-meta">${r.quarter} &nbsp;·&nbsp; ${getThinShort(r.division)} &nbsp;·&nbsp; ${getTeras(r.pillar)} &nbsp;·&nbsp; <b style="color:${getColor(r.actual)}">${r.actual.toFixed(1)}%</b></div>
+      </div>
+      <div class="entry-actions">
+        <button class="btn btn-sm" onclick="editRecord(${r.id})" title="Edit">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteRecord(${r.id})" title="Padam">🗑️</button>
+      </div>
     </div>`).join('');
 }
 
+/* ── REPORT ── */
 function getFiltered(){
   const q=document.getElementById('r-quarter').value;
   const d=document.getElementById('r-division').value;
   const p=document.getElementById('r-pillar').value;
   const s=document.getElementById('r-status').value;
   return records.filter(r=>{
-    if(q&&r.quarter!==q)return false;
-    if(d&&r.division!==d)return false;
-    if(p&&r.pillar!==p)return false;
-    if(s&&r.grade.toLowerCase()!==s)return false;
+    if(q&&r.quarter!==q) return false;
+    if(d&&r.division!==d) return false;
+    if(p&&r.pillar!==p) return false;
+    if(s&&r.grade.toLowerCase()!==s) return false;
     return true;
   });
 }
 
 function renderReport(){
-  const filtered=getFiltered();
-  const tbody=document.getElementById('report-body');
-  const empty=document.getElementById('report-empty');
-  const count=document.getElementById('report-count');
-  if(!filtered.length){tbody.innerHTML='';empty.style.display='block';count.textContent='';return;}
-  empty.style.display='none';
-  count.textContent=filtered.length+' rekod dijumpai';
-  tbody.innerHTML=filtered.map(r=>`
+  const filtered = getFiltered();
+  const tbody = document.getElementById('report-body');
+  const empty = document.getElementById('report-empty');
+  const count = document.getElementById('report-count');
+  if(!filtered.length){ tbody.innerHTML=''; empty.style.display='block'; count.textContent=''; return; }
+  empty.style.display = 'none';
+  count.textContent = filtered.length + ' rekod dijumpai';
+  tbody.innerHTML = filtered.map(r=>`
     <tr>
-      <td>${r.quarter}</td>
-      <td style="font-size:11px">${r.division.replace('Bahagian ','')}</td>
-      <td style="font-size:11px">${r.pillar.split(' - ')[0]}</td>
-      <td style="font-weight:500">${r.initiative}</td>
+      <td><span style="font-size:12px;font-weight:600">${r.quarter}</span></td>
+      <td style="font-size:11.5px">${getThinShort(r.division)}</td>
+      <td style="font-size:11px;font-weight:700;color:var(--span-navy)">${getTeras(r.pillar)}</td>
+      <td style="font-weight:600">${r.initiative}</td>
       <td style="text-align:center">${r.achievement.toFixed(1)}%</td>
       <td style="text-align:center">${r.target.toFixed(1)}%</td>
-      <td style="text-align:center;font-weight:700;color:${getColor(r.actual)}">${r.actual.toFixed(1)}%</td>
+      <td style="text-align:center;font-weight:800;color:${getColor(r.actual)}">${r.actual.toFixed(1)}%</td>
       <td><span class="badge ${getBadge(r.grade)}">${r.grade}</span></td>
-      <td style="font-size:11px">${r.status||'—'}</td>
-      <td><button class="btn btn-sm" onclick="editRecord(${r.id})"><i class="ti ti-pencil"></i></button></td>
+      <td style="font-size:11px;color:var(--text-secondary)">${r.status||'—'}</td>
+      <td><button class="btn btn-sm" onclick="editRecord(${r.id})" title="Edit">✏️</button></td>
     </tr>`).join('');
 }
 
+/* ── DASHBOARD ── */
 function renderDashboard(){
-  const m=document.getElementById('dash-metrics');
-  const t=document.getElementById('dash-teras');
-  const il=document.getElementById('dash-initiatives');
+  const m  = document.getElementById('dash-metrics');
+  const t  = document.getElementById('dash-teras');
+  const il = document.getElementById('dash-initiatives');
+
   if(!records.length){
-    m.innerHTML='<div class="empty" style="grid-column:1/-1">Tiada data. Tambah rekod dalam panel Data Entry.</div>';
-    t.innerHTML='';il.innerHTML='<div class="empty">Tiada data lagi.</div>';return;
+    m.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📊</div><div class="empty-title">Tiada data</div><div>Tambah rekod dalam panel Data Entry</div></div>`;
+    t.innerHTML = ''; il.innerHTML = `<div class="empty"><div class="empty-icon">📈</div><div class="empty-title">Tiada data lagi</div></div>`;
+    return;
   }
-  const n=records.length;
-  const achieve=records.filter(r=>r.grade==='Achieve').length;
-  const moderate=records.filter(r=>r.grade==='Moderate').length;
-  const weak=records.filter(r=>r.grade==='Weak').length;
-  const avg=records.reduce((s,r)=>s+r.actual,0)/n;
-  m.innerHTML=`
-    <div class="metric"><div class="metric-label">Jumlah Rekod</div><div class="metric-value">${n}</div></div>
-    <div class="metric"><div class="metric-label">% Actual Keseluruhan</div><div class="metric-value" style="color:${getColor(avg)}">${avg.toFixed(1)}%</div><div class="metric-sub">${getGrade(avg)}</div></div>
-    <div class="metric"><div class="metric-label" style="color:var(--green-text)">▲ Achieve</div><div class="metric-value">${achieve}</div><div class="metric-sub">${(achieve/n*100).toFixed(0)}% daripada rekod</div></div>
-    <div class="metric"><div class="metric-label" style="color:var(--blue)">● Moderate</div><div class="metric-value">${moderate}</div><div class="metric-sub">${(moderate/n*100).toFixed(0)}% daripada rekod</div></div>
-    <div class="metric"><div class="metric-label" style="color:var(--red)">▼ Weak</div><div class="metric-value">${weak}</div><div class="metric-sub">${(weak/n*100).toFixed(0)}% daripada rekod</div></div>`;
-  const teras=['TERAS 1 - KEMAMPANAN KEWANGAN','TERAS 2 - KEMAMPANAN INDUSTRI','TERAS 3 - KECEKAPAN OPERASI','TERAS 4 - PEMERKASAAN TADBIR URUS'];
-  t.innerHTML=teras.map(tr=>{
-    const recs=records.filter(r=>r.pillar===tr);
-    if(!recs.length)return`<div class="teras-card"><div class="teras-name">${tr}</div><div style="font-size:12px;color:var(--text2)">Tiada data</div></div>`;
-    const a=recs.reduce((s,r)=>s+r.actual,0)/recs.length;
-    const c=getColor(a);
-    return`<div class="teras-card">
-      <div class="teras-name">${tr}</div>
+
+  const n = records.length;
+  const achieve  = records.filter(r=>r.grade==='Achieve').length;
+  const moderate = records.filter(r=>r.grade==='Moderate').length;
+  const weak     = records.filter(r=>r.grade==='Weak').length;
+  const avg = records.reduce((s,r)=>s+r.actual,0)/n;
+
+  m.innerHTML = `
+    <div class="metric metric-total">
+      <div class="metric-icon">📋</div>
+      <div class="metric-label">Jumlah Rekod</div>
+      <div class="metric-value">${n}</div>
+      <div class="metric-sub">Inisiatif dipantau</div>
+    </div>
+    <div class="metric metric-avg">
+      <div class="metric-icon">📊</div>
+      <div class="metric-label">% Actual Keseluruhan</div>
+      <div class="metric-value" style="color:${getColor(avg)}">${avg.toFixed(1)}%</div>
+      <div class="metric-sub">${getGrade(avg)}</div>
+    </div>
+    <div class="metric metric-achieve">
+      <div class="metric-icon">✅</div>
+      <div class="metric-label">Achieve</div>
+      <div class="metric-value" style="color:var(--achieve-mid)">${achieve}</div>
+      <div class="metric-sub">${n?Math.round(achieve/n*100):0}% daripada rekod</div>
+    </div>
+    <div class="metric metric-mod">
+      <div class="metric-icon">🔵</div>
+      <div class="metric-label">Moderate</div>
+      <div class="metric-value" style="color:var(--moderate-mid)">${moderate}</div>
+      <div class="metric-sub">${n?Math.round(moderate/n*100):0}% daripada rekod</div>
+    </div>
+    <div class="metric metric-weak">
+      <div class="metric-icon">⚠️</div>
+      <div class="metric-label">Weak</div>
+      <div class="metric-value" style="color:var(--weak-mid)">${weak}</div>
+      <div class="metric-sub">${n?Math.round(weak/n*100):0}% daripada rekod</div>
+    </div>`;
+
+  const terasList = [
+    { key:'TERAS 1 - KEMAMPANAN KEWANGAN',  num:'T1', name:'Kemampanan Kewangan' },
+    { key:'TERAS 2 - KEMAMPANAN INDUSTRI',  num:'T2', name:'Kemampanan Industri' },
+    { key:'TERAS 3 - KECEKAPAN OPERASI',    num:'T3', name:'Kecekapan Operasi' },
+    { key:'TERAS 4 - PEMERKASAAN TADBIR URUS', num:'T4', name:'Pemerkasaan Tadbir Urus' }
+  ];
+  t.innerHTML = terasList.map(tr=>{
+    const recs = records.filter(r=>r.pillar===tr.key);
+    if(!recs.length) return `<div class="teras-card"><div class="teras-num">${tr.num}</div><div class="teras-name">${tr.name}</div><div style="font-size:12px;color:var(--text-muted)">Tiada data</div><div class="teras-bg-num">${tr.num.replace('T','')}</div></div>`;
+    const a = recs.reduce((s,r)=>s+r.actual,0)/recs.length;
+    const c = getColor(a);
+    const g = getGrade(a);
+    return `<div class="teras-card">
+      <div class="teras-num">${tr.num} &nbsp;·&nbsp; <span class="badge ${getBadge(g)}" style="font-size:10px;padding:2px 7px">${g}</span></div>
+      <div class="teras-name">${tr.name}</div>
       <div class="teras-pct" style="color:${c}">${a.toFixed(1)}%</div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(a,100)}%;background:${c}"></div></div>
-      <div style="font-size:11px;color:var(--text2);margin-top:6px">${getGrade(a)} · ${recs.length} inisiatif</div>
+      <div class="progress-track"><div class="progress-fill" style="width:${Math.min(a,100)}%;background:${getGradient(a)}"></div></div>
+      <div class="teras-meta"><span>${recs.length} inisiatif</span></div>
+      <div class="teras-bg-num">${tr.num.replace('T','')}</div>
     </div>`;
   }).join('');
-  const im={};
+
+  const im = {};
   records.forEach(r=>{
-    if(!im[r.initiative])im[r.initiative]={name:r.initiative,vals:[],statuses:[]};
+    if(!im[r.initiative]) im[r.initiative]={name:r.initiative, vals:[], statuses:[]};
     im[r.initiative].vals.push(r.actual);
-    if(r.status)im[r.initiative].statuses.push(r.status);
+    if(r.status) im[r.initiative].statuses.push(r.status);
   });
-  const inits=Object.values(im).map(x=>({...x,avg:x.vals.reduce((a,b)=>a+b,0)/x.vals.length})).sort((a,b)=>b.avg-a.avg);
-  il.innerHTML='<div class="initiative-list">'+inits.map(it=>{
-    const c=getColor(it.avg);const g=getGrade(it.avg);
-    const st=it.statuses.length?it.statuses[it.statuses.length-1]:'';
-    return`<div class="initiative-item">
+  const inits = Object.values(im)
+    .map(x=>({...x, avg:x.vals.reduce((a,b)=>a+b,0)/x.vals.length}))
+    .sort((a,b)=>b.avg-a.avg);
+
+  il.innerHTML = '<div class="init-list">' + inits.map((it,i)=>{
+    const c = getColor(it.avg);
+    const g = getGrade(it.avg);
+    const st = it.statuses.length ? it.statuses[it.statuses.length-1] : '';
+    return `<div class="init-item">
+      <div class="init-rank">${i+1}</div>
       <div class="init-name" title="${it.name}">${it.name}</div>
-      <div class="init-bar-wrap"><div class="init-bar-fill" style="width:${Math.min(it.avg,100)}%;background:${c}"></div></div>
+      <div class="init-bar-track"><div class="init-bar-fill" style="width:${Math.min(it.avg,100)}%;background:${getGradient(it.avg)}"></div></div>
       <div class="init-pct" style="color:${c}">${it.avg.toFixed(1)}%</div>
       <span class="badge ${getBadge(g)}">${g}</span>
-      ${st?`<span class="init-status" title="${st}">${st}</span>`:''}
+      ${st?`<span class="init-status-text" title="${st}">${st}</span>`:''}
     </div>`;
-  }).join('')+'</div>';
+  }).join('') + '</div>';
 }
 
 function renderAll(){ renderEntryList(); renderReport(); renderDashboard(); }
 
+/* ── TABS ── */
 function switchTab(name){
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['entry','report','dashboard'][i]===name));
   document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+name));
-  if(name==='report')renderReport();
-  if(name==='dashboard')renderDashboard();
+  if(name==='report')   renderReport();
+  if(name==='dashboard') renderDashboard();
 }
 
+/* ── TOAST ── */
 function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
 }
 
+/* ── EXPORT CSV ── */
 function exportCSV(){
-  const filtered=getFiltered();
-  if(!filtered.length){alert('Tiada data untuk dieksport.');return;}
-  const headers=['Quarter','Bahagian','Teras','Inisiatif','Program/Aktiviti','Achievement(%)','Target(%)','%Actual','Gred','Status Pencapaian','Cabaran','Tindakan'];
-  const rows=filtered.map(r=>[r.quarter,r.division,r.pillar,r.initiative,r.program,r.achievement.toFixed(1),r.target.toFixed(1),r.actual.toFixed(1),r.grade,r.status,r.challenge,r.tackle].map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(','));
-  const csv=[headers.join(','),...rows].join('\n');
-  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='SSP2030_Monitoring_2026.csv';a.click();
+  const filtered = getFiltered();
+  if(!filtered.length){ showToast('⚠️  Tiada data untuk dieksport'); return; }
+  const headers = ['Quarter','Bahagian','Teras','Inisiatif','Program/Aktiviti','Achievement(%)','Target(%)','%Actual','Gred','Status Pencapaian','Cabaran','Tindakan'];
+  const rows = filtered.map(r=>[r.quarter,r.division,r.pillar,r.initiative,r.program,r.achievement.toFixed(1),r.target.toFixed(1),r.actual.toFixed(1),r.grade,r.status,r.challenge,r.tackle]
+    .map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.join(','),...rows].join('\n');
+  const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'SSP2030_Monitoring_2026.csv'; a.click();
+  showToast('📥  Fail CSV berjaya dimuat turun');
+}
+
+/* ── GOOGLE SHEETS ── */
+async function loadFromSheets(){
+  setSyncStatus('loading','Menyambung...');
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=get', {method:'GET'});
+    const data = await res.json();
+    if(Array.isArray(data) && data.length > 1){
+      records = data.slice(1).filter(r=>r[0]).map(r=>({
+        id:Number(r[0]), quarter:r[1]||'', division:r[2]||'', pillar:r[3]||'',
+        initiative:r[4]||'', program:r[5]||'',
+        achievement:parseFloat(r[6])||0, target:parseFloat(r[7])||0,
+        actual:parseFloat(r[8])||0, grade:r[9]||'',
+        status:r[10]||'', challenge:r[11]||'', tackle:r[12]||''
+      }));
+    } else { records = []; }
+    setSyncStatus('ok','Tersambung');
+    renderAll();
+    localStorage.setItem('ssp2030_backup', JSON.stringify(records));
+  } catch(e){
+    setSyncStatus('err','Gagal Sambung');
+    const local = localStorage.getItem('ssp2030_backup');
+    if(local){ records = JSON.parse(local); renderAll(); }
+  }
+}
+
+async function saveToSheets(){
+  setSyncStatus('loading','Menyimpan...');
+  try {
+    await fetch(SCRIPT_URL, {
+      method:'POST',
+      body: JSON.stringify({action:'save', records}),
+      headers:{'Content-Type':'text/plain'}
+    });
+    localStorage.setItem('ssp2030_backup', JSON.stringify(records));
+    setSyncStatus('ok','Tersimpan ✓');
+    setTimeout(()=>setSyncStatus('ok','Tersambung'), 2000);
+  } catch(e){
+    setSyncStatus('err','Gagal Simpan');
+    localStorage.setItem('ssp2030_backup', JSON.stringify(records));
+  }
 }
 
 loadFromSheets();
