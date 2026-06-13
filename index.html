@@ -796,6 +796,22 @@ tbody tr:hover td { background: rgba(0,93,164,0.04); }
   margin: 1.25rem 0;
 }
 
+/* ── REPORT DIVISION PILLS ── */
+.div-pill { padding:4px 14px; border-radius:20px; font-size:11.5px; font-weight:600; cursor:pointer; background:rgba(255,255,255,0.7); color:var(--text-secondary); border:1.5px solid rgba(0,59,111,0.15); transition:all .15s; white-space:nowrap; }
+.div-pill:hover { background:rgba(0,93,164,0.07); border-color:rgba(0,93,164,0.25); color:var(--span-blue); }
+.div-pill.active-pill { background:var(--span-navy); color:#fff; border-color:var(--span-navy); }
+
+/* ── REPORT CARDS ── */
+.rcard { background:var(--glass-white); backdrop-filter:blur(16px); border:1px solid var(--glass-border); border-radius:var(--radius-xl); box-shadow:var(--glass-shadow); margin-bottom:14px; overflow:hidden; transition:box-shadow .2s; }
+.rcard:hover { box-shadow:var(--glass-shadow-lg); }
+.rcard-top { display:grid; grid-template-columns:80px 150px 1fr 130px 90px 110px 60px; gap:12px; align-items:center; padding:14px 20px; background:rgba(255,255,255,0.55); border-bottom:1px solid rgba(0,59,111,0.07); }
+.rcard-head { display:grid; grid-template-columns:80px 150px 1fr 130px 90px 110px 60px; gap:12px; padding:8px 20px; background:linear-gradient(90deg,rgba(0,59,111,0.05),rgba(0,163,163,0.04)); border-radius:var(--radius-xl) var(--radius-xl) 0 0; border-bottom:1.5px solid rgba(0,59,111,0.10); }
+.rcard-head span { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:var(--span-navy); }
+.rcard-body { padding:14px 20px; display:flex; flex-direction:column; gap:10px; }
+.info-block { border-radius:var(--radius-md); padding:10px 13px; }
+.info-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; display:flex; align-items:center; gap:5px; }
+.info-text { font-size:12.5px; line-height:1.65; color:var(--text-secondary); }
+
 @media (max-width: 640px) {
   .form-grid { grid-template-columns: 1fr; }
   .teras-grid { grid-template-columns: 1fr; }
@@ -976,89 +992,75 @@ tbody tr:hover td { background: rgba(0,93,164,0.04); }
        PANEL 2: REPORT
   ════════════════════════════════ -->
   <div id="panel-report" class="panel">
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon">🔍</div>
-        <div>
-          <div class="card-title">Laporan Pencapaian</div>
-          <div class="card-sub">Tapis dan semak rekod mengikut kriteria</div>
+    <!-- FILTER CARD -->
+    <div class="card" style="margin-bottom:1rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:15px;color:var(--span-teal)">▽</span>
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--span-teal);text-transform:uppercase">SARINGAN LAPORAN PEMANTAUAN (TAPISAN DATA)</span>
         </div>
-        <button class="btn btn-sm" style="margin-left:auto" onclick="exportCSV()">⬇️ &nbsp;Export CSV</button>
+        <button class="btn btn-sm" onclick="resetReportFilters()" style="color:var(--span-blue);border-color:rgba(0,93,164,0.2)">↺ Set Semula Tapisan</button>
       </div>
-      <div class="filter-bar">
-        <div class="form-group" style="min-width:110px">
-          <label>Quarter</label>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;margin-bottom:14px">
+        <div class="form-group">
+          <label>Cari Inisiatif Atau Aktiviti</label>
+          <div style="position:relative">
+            <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:13px">🔍</span>
+            <input type="text" id="r-search" placeholder="Cari 'digital', bahagian, kata kunci..." style="padding-left:32px" oninput="renderReport()">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Quarter / Suku</label>
           <select id="r-quarter" onchange="renderReport()">
-            <option value="">Semua Quarter</option>
+            <option value="">Semua Quarter (Suku)</option>
             <option>Quarter 1</option><option>Quarter 2</option>
             <option>Quarter 3</option><option>Quarter 4</option>
           </select>
         </div>
-        <div class="form-group" style="min-width:190px">
-          <label>Bahagian</label>
-          <select id="r-division" onchange="renderReport()">
-            <option value="">Semua Bahagian</option>
-            <option>Bahagian Teknikal</option>
-            <option>Bahagian Operasi</option>
-            <option>Bahagian Ekonomi</option>
-            <option>Bahagian KWSMP</option>
-            <option>Bahagian Khidmat Perundangan</option>
-            <option>Bahagian Khidmat Pengurusan</option>
-            <option>Bahagian Sumber Manusia</option>
-            <option>Bahagian Khidmat Sokongan</option>
-            <option>Bahagian Kelestarian &amp; Inovasi</option>
-            <option>Bahagian Perancangan Strategik dan Transformasi</option>
-            <option>Bahagian Audit Dalam</option>
-            <option>Bahagian Integriti dan Pengurusan Risiko</option>
-          </select>
-        </div>
-        <div class="form-group" style="min-width:170px">
-          <label>Teras</label>
+        <div class="form-group">
+          <label>Pillar / Teras</label>
           <select id="r-pillar" onchange="renderReport()">
-            <option value="">Semua Teras</option>
+            <option value="">Semua Teras (Pillars)</option>
             <option>TERAS 1 - KEMAMPANAN KEWANGAN</option>
             <option>TERAS 2 - KEMAMPANAN INDUSTRI</option>
             <option>TERAS 3 - KECEKAPAN OPERASI</option>
             <option>TERAS 4 - PEMERKASAAN TADBIR URUS</option>
           </select>
         </div>
-        <div class="form-group" style="min-width:120px">
-          <label>Status Gred</label>
+        <div class="form-group">
+          <label>Status Prestasi</label>
           <select id="r-status" onchange="renderReport()">
             <option value="">Semua Status</option>
-            <option value="achieve">✅ Achieve</option>
-            <option value="moderate">🔵 Moderate</option>
-            <option value="weak">🔴 Weak</option>
+            <option value="achieve">Achieve</option>
+            <option value="moderate">Moderate</option>
+            <option value="weak">Weak</option>
           </select>
         </div>
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th style="width:78px">Quarter</th>
-              <th style="width:125px">Bahagian</th>
-              <th style="width:72px">Teras</th>
-              <th style="width:120px">Inisiatif</th>
-              <th style="width:62px;text-align:center">Capai%</th>
-              <th style="width:58px;text-align:center">Sasar%</th>
-              <th style="width:62px;text-align:center">Actual%</th>
-              <th style="width:85px">Gred</th>
-              <th style="width:100px">Status</th>
-              <th style="width:50px">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="report-body"></tbody>
-        </table>
+      <!-- Division pills -->
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+        <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-right:4px;flex-shrink:0">BAHAGIAN PENERAJU:</span>
+        <div id="dp-all"  onclick="setDivisionPill('')"                                                    class="div-pill active-pill">Semua</div>
+        <div id="dp-BT"   onclick="setDivisionPill('Bahagian Teknikal')"                                  class="div-pill">Teknikal</div>
+        <div id="dp-BO"   onclick="setDivisionPill('Bahagian Operasi')"                                   class="div-pill">Operasi</div>
+        <div id="dp-BE"   onclick="setDivisionPill('Bahagian Ekonomi')"                                   class="div-pill">Ekonomi</div>
+        <div id="dp-BK"   onclick="setDivisionPill('Bahagian KWSMP')"                                     class="div-pill">KWSMP</div>
+        <div id="dp-KP"   onclick="setDivisionPill('Bahagian Khidmat Perundangan')"                       class="div-pill">Kh. Perundangan</div>
+        <div id="dp-KPG"  onclick="setDivisionPill('Bahagian Khidmat Pengurusan')"                        class="div-pill">Kh. Pengurusan</div>
+        <div id="dp-SM"   onclick="setDivisionPill('Bahagian Sumber Manusia')"                            class="div-pill">Sumber Manusia</div>
+        <div id="dp-KS"   onclick="setDivisionPill('Bahagian Khidmat Sokongan')"                          class="div-pill">Kh. Sokongan</div>
+        <div id="dp-KI"   onclick="setDivisionPill('Bahagian Kelestarian &amp; Inovasi')"                 class="div-pill">Kelestarian</div>
+        <div id="dp-PST"  onclick="setDivisionPill('Bahagian Perancangan Strategik dan Transformasi')"    class="div-pill">Perancangan Strategik</div>
+        <div id="dp-AD"   onclick="setDivisionPill('Bahagian Audit Dalam')"                               class="div-pill">Audit Dalam</div>
+        <div id="dp-IP"   onclick="setDivisionPill('Bahagian Integriti dan Pengurusan Risiko')"           class="div-pill">Integriti &amp; Risiko</div>
       </div>
-      <div id="report-empty" style="display:none">
-        <div class="empty">
-          <div class="empty-icon">🔍</div>
-          <div class="empty-title">Tiada rekod dijumpai</div>
-          <div>Cuba tukar kriteria penapis</div>
-        </div>
-      </div>
-      <div id="report-count" style="font-size:12px;color:var(--text-muted);margin-top:10px;text-align:right;padding:0 2px"></div>
+    </div>
+    <!-- Result count -->
+    <div id="report-count" style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;font-weight:500;padding:0 2px"></div>
+    <!-- Cards -->
+    <div id="report-cards"></div>
+    <div id="report-empty" style="display:none">
+      <div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">Tiada rekod dijumpai</div><div>Cuba tukar kriteria tapisan</div></div>
     </div>
   </div>
 
@@ -1312,41 +1314,97 @@ function renderEntryList(){
 }
 
 /* ── REPORT ── */
+let activeDivPill = '';
+
+function setDivisionPill(val){
+  activeDivPill = val;
+  document.querySelectorAll('.div-pill').forEach(el=>el.classList.remove('active-pill'));
+  const map={'':'dp-all','Bahagian Teknikal':'dp-BT','Bahagian Operasi':'dp-BO','Bahagian Ekonomi':'dp-BE','Bahagian KWSMP':'dp-BK','Bahagian Khidmat Perundangan':'dp-KP','Bahagian Khidmat Pengurusan':'dp-KPG','Bahagian Sumber Manusia':'dp-SM','Bahagian Khidmat Sokongan':'dp-KS','Bahagian Kelestarian & Inovasi':'dp-KI','Bahagian Perancangan Strategik dan Transformasi':'dp-PST','Bahagian Audit Dalam':'dp-AD','Bahagian Integriti dan Pengurusan Risiko':'dp-IP'};
+  const el=document.getElementById(map[val]||'dp-all');
+  if(el) el.classList.add('active-pill');
+  renderReport();
+}
+
+function resetReportFilters(){
+  document.getElementById('r-search').value='';
+  document.getElementById('r-quarter').value='';
+  document.getElementById('r-pillar').value='';
+  document.getElementById('r-status').value='';
+  setDivisionPill('');
+}
+
 function getFiltered(){
-  const q=document.getElementById('r-quarter').value;
-  const d=document.getElementById('r-division').value;
-  const p=document.getElementById('r-pillar').value;
-  const s=document.getElementById('r-status').value;
+  const q   = document.getElementById('r-quarter').value;
+  const p   = document.getElementById('r-pillar').value;
+  const s   = document.getElementById('r-status').value;
+  const src = (document.getElementById('r-search')?document.getElementById('r-search').value:'').toLowerCase();
   return records.filter(r=>{
     if(q&&r.quarter!==q) return false;
-    if(d&&r.division!==d) return false;
     if(p&&r.pillar!==p) return false;
     if(s&&r.grade.toLowerCase()!==s) return false;
+    if(activeDivPill&&r.division!==activeDivPill) return false;
+    if(src&&!r.initiative.toLowerCase().includes(src)&&!r.program.toLowerCase().includes(src)&&!r.division.toLowerCase().includes(src)) return false;
     return true;
   });
 }
 
 function renderReport(){
   const filtered = getFiltered();
-  const tbody = document.getElementById('report-body');
-  const empty = document.getElementById('report-empty');
-  const count = document.getElementById('report-count');
-  if(!filtered.length){ tbody.innerHTML=''; empty.style.display='block'; count.textContent=''; return; }
-  empty.style.display = 'none';
-  count.textContent = filtered.length + ' rekod dijumpai';
-  tbody.innerHTML = filtered.map(r=>`
-    <tr>
-      <td><span style="font-size:12px;font-weight:600">${r.quarter}</span></td>
-      <td style="font-size:11.5px">${getThinShort(r.division)}</td>
-      <td style="font-size:11px;font-weight:700;color:var(--span-navy)">${getTeras(r.pillar)}</td>
-      <td style="font-weight:600">${r.initiative}</td>
-      <td style="text-align:center">${r.achievement.toFixed(1)}%</td>
-      <td style="text-align:center">${r.target.toFixed(1)}%</td>
-      <td style="text-align:center;font-weight:800;color:${getColor(r.actual)}">${r.actual.toFixed(1)}%</td>
-      <td><span class="badge ${getBadge(r.grade)}">${r.grade}</span></td>
-      <td style="font-size:11px;color:var(--text-secondary)">${r.status||'—'}</td>
-      <td><button class="btn btn-sm" onclick="editRecord(${r.id})" title="Edit">✏️</button></td>
-    </tr>`).join('');
+  const cardsEl  = document.getElementById('report-cards');
+  const emptyEl  = document.getElementById('report-empty');
+  const countEl  = document.getElementById('report-count');
+  if(!cardsEl) return;
+  if(!filtered.length){ cardsEl.innerHTML=''; emptyEl.style.display='block'; countEl.textContent=''; return; }
+  emptyEl.style.display='none';
+  countEl.textContent=`Menunjukkan ${filtered.length} daripada ${records.length} rekod pemantauan terdaftar.`;
+
+  const headHTML=`<div class="rcard-head">
+    <span>QUARTER</span><span>BAHAGIAN</span><span>TERAS / INISIATIF</span>
+    <span>PROGRAM / AKTIVITI / KEMAJUAN</span><span style="text-align:center">ACH VS TAR</span>
+    <span style="text-align:center">% ACTUAL</span><span style="text-align:center">STATUS</span><span>TINDAKAN</span>
+  </div>`;
+
+  const rowsHTML=filtered.map(r=>{
+    const c=getColor(r.actual); const g=getGrade(r.actual);
+    const borderL=g==='Achieve'?'4px solid #16A34A':g==='Moderate'?'4px solid #2563EB':'4px solid #DC2626';
+    return `<div class="rcard" style="border-left:${borderL};border-radius:0;margin-bottom:0;border-top:1px solid rgba(0,59,111,0.07)">
+      <div class="rcard-top">
+        <div><div style="font-size:11px;font-weight:700;padding:5px 10px;background:rgba(0,59,111,0.07);border-radius:20px;text-align:center;color:var(--span-navy);white-space:nowrap">${r.quarter}</div></div>
+        <div><div style="font-size:11.5px;color:var(--text-secondary)">Bhn. ${getThinShort(r.division)}</div></div>
+        <div>
+          <div style="font-size:10px;font-weight:800;color:var(--span-teal);letter-spacing:0.5px;margin-bottom:3px">${getTeras(r.pillar)}</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-primary);line-height:1.35">${r.initiative}</div>
+        </div>
+        <div><div style="font-size:11.5px;color:var(--text-secondary);line-height:1.5">Program / Aktiviti:<br><b>${r.program||'—'}</b></div></div>
+        <div style="text-align:center">
+          <div style="font-family:var(--font-display);font-size:17px;font-weight:800;color:${c}">${r.achievement.toFixed(1)}%</div>
+          <div style="font-size:10px;color:var(--text-muted)">dari ${r.target.toFixed(1)}%</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:${c}">${r.actual.toFixed(1)}%</div>
+          <span class="badge ${getBadge(g)}" style="font-size:10px;margin-top:4px;display:inline-block">${g==='Achieve'?'ACHIEVE':g==='Moderate'?'MODERATE':'WEAK'}</span><br>
+          <span style="font-size:10px;color:var(--text-muted)">Gred ${g==='Achieve'?'A':g==='Moderate'?'B':'C'}</span>
+        </div>
+        <div style="display:flex;gap:5px;justify-content:center;align-items:center">
+          <button class="btn btn-sm" onclick="editRecord(${r.id})" title="Sunting">✏️</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteRecord(${r.id})" title="Padam">🗑️</button>
+        </div>
+      </div>
+      ${(r.status||r.challenge||r.tackle)?`<div class="rcard-body">
+        ${r.status?`<div class="info-block" style="background:rgba(0,59,111,0.03);border:1px solid rgba(0,59,111,0.10)">
+          <div class="info-label" style="color:var(--span-blue)">✅ LAPORAN STATUS KEMAJUAN:</div>
+          <div class="info-text">${r.status}</div></div>`:''}
+        ${r.challenge?`<div class="info-block" style="background:rgba(217,119,6,0.04);border:1px solid rgba(217,119,6,0.18)">
+          <div class="info-label" style="color:#92400E">⚠️ KEKANGAN &amp; ISU:</div>
+          <div class="info-text" style="color:#92400E;font-style:italic">${r.challenge}</div></div>`:''}
+        ${r.tackle?`<div class="info-block" style="background:rgba(37,99,235,0.04);border:1px solid rgba(37,99,235,0.15)">
+          <div class="info-label" style="color:var(--span-blue)">🛠️ TINDAKAN PEMULIHAN (TACKLE ACTION):</div>
+          <div class="info-text">${r.tackle}</div></div>`:''}
+      </div>`:''}
+    </div>`;
+  }).join('');
+
+  cardsEl.innerHTML=`<div style="border:1px solid rgba(0,59,111,0.10);border-radius:var(--radius-xl);overflow:hidden;margin-bottom:14px">${headHTML}${rowsHTML}</div>`;
 }
 
 /* ── DASHBOARD ── */
